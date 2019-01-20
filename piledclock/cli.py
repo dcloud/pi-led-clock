@@ -28,7 +28,7 @@ def run(args):
     dt = datetime.now()
 
     digits = (*split_digits(dt.hour), *split_digits(dt.minute))
-    quadrants = ((x // 2 * QUAD_SIZE, x % 2 * QUAD_SIZE) for x in range(4))
+    quadrants = ((x % 2 * QUAD_SIZE, x // 2 * QUAD_SIZE) for x in range(4))
 
     for n, pos in zip(digits, quadrants):
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
