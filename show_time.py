@@ -158,17 +158,10 @@ def main():
     time_str = dt.strftime("%I:%M %p")
     print(time_str)
 
-    hour_tens, hour_ones = split_digits(dt.hour)
-    min_tens, min_ones = split_digits(dt.minute)
+    digits = (*split_digits(dt.hour), *split_digits(dt.minute))
+    quadrants = ((x // 2 * QUAD_SIZE, x % 2 * QUAD_SIZE) for x in range(4))
 
-    digits = (
-        (hour_tens, (0, 0)),
-        (hour_ones, (8, 0)),
-        (min_tens, (0, 8)),
-        (min_ones, (8, 8)),
-    )
-
-    for n, pos in digits:
+    for n, pos in zip(digits, quadrants):
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
         print_bitmap(uhd, bitmap)
 
@@ -177,7 +170,7 @@ def main():
 
     uhd.show()
 
-    time.sleep(3)
+    time.sleep(8)
 
     uhd.clear()
     uhd.off()
