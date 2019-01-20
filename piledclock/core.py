@@ -39,7 +39,11 @@ def to_color_tuple(in_color):
 
 
 def run(args):
-    color_choices = [Color[args.colorname], tuple(args.rgb), Color.WHITE]
+    color_choices = [
+        Color[args.colorname] if args.colorname else None,
+        tuple(args.rgb) if args.rgb and len(args.rgb) == 3 else None,
+        Color.WHITE,
+    ]
     chosen_color = to_color_tuple([x for x in color_choices if x][0])
 
     if args.verbose > 0:
