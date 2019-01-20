@@ -4,6 +4,7 @@ import time
 import unicornhathd as uhd
 
 from .core import split_digits, make_bitmap, print_bitmap
+from .colors import Color
 from .chars import NUMBERS
 from .conf import (
     DISPLAY_ROTATION,
@@ -12,6 +13,8 @@ from .conf import (
     MAX_BRIGHTNESS,
     QUAD_SIZE,
 )
+
+color_choices = tuple([c.name for c in Color])
 
 
 def run(args):
@@ -25,7 +28,7 @@ def run(args):
     quadrants = ((x % 2 * QUAD_SIZE, x // 2 * QUAD_SIZE) for x in range(4))
 
     for n, pos in zip(digits, quadrants):
-        bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
+        bitmap = make_bitmap(NUMBERS[n - 1], offset=pos, color=args.color)
         if args.verbose > 1:
             print(bitmap)
         print_bitmap(uhd, bitmap)
@@ -77,7 +80,7 @@ def main():
     parser = argparse.ArgumentParser(description="Display time on LED clock")
     parser.add_argument("--verbose", "-v", action="count", default=0)
     parser.add_argument("--rotation", type=int, default=DISPLAY_ROTATION)
-    parser.add_argument("--color", choices=["RED", "GREEN", "BLUE"])
+    parser.add_argument("--color", choices=color_choices, default=Color.WHITE.name),
     parser.add_argument("--no-fade", action="store_false", dest="fade")
     parser.add_argument(
         "--duration",
