@@ -14,14 +14,16 @@ def split_digits(t):
     return (t // 10, t % 10)
 
 
-def make_bitmap(char, offset=(0, 0), color=Color.WHITE):
-    color_value = color.value if isinstance(color, Color) else color
+def make_bitmap(char, offset=(0, 0), color_choice=Color.WHITE):
+    color_value = (
+        color_choice.value if isinstance(color_choice, Color) else color_choice
+    )
     for x_pos, bits in enumerate(char):
         x = x_pos + offset[1]
         for y_pos, step in enumerate(bit_steps):
             y = y_pos + offset[0]
             pixel_on = bits & step != 0
-            yield ((x, y), color_value if pixel_on else Color.BLACK.value)
+            yield tuple([(x, y), color_value if pixel_on else Color.BLACK.value])
 
 
 def print_bitmap(display, bitmap):
