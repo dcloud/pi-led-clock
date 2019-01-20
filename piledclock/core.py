@@ -26,4 +26,3 @@ def make_bitmap(char, offset=(0, 0), color=colors.WHITE):
 def print_bitmap(display, bitmap):
     for pixel, color in bitmap:
         display.set_pixel(*pixel, *color)
-        print(pixel, color)
