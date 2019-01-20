@@ -3,7 +3,7 @@
 # y top to bottom
 
 from .conf import QUAD_SIZE
-import colors
+from . import colors
 
 # Calculate the values to extract bits from the bit chars
 # FYI, the range is reversed because drawing is from left-to-right
