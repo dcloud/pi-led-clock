@@ -3,14 +3,9 @@ import time
 
 import unicornhathd as uhd
 
-from .core import (
-    split_digits,
-    DISPLAY_ROTATION,
-    NUMBERS,
-    QUAD_SIZE,
-    make_bitmap,
-    print_bitmap,
-)
+from .core import split_digits, make_bitmap, print_bitmap
+from .chars import NUMBERS
+from .conf import DISPLAY_ROTATION, QUAD_SIZE
 
 
 def main():
