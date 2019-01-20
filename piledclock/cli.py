@@ -47,7 +47,7 @@ def run(args):
 
     if args.verbose > 0:
         print("Hour {:02d}".format(dt.hour))
-        print("Minute {:02d}", dt.minute)
+        print("Minute {:02d}".format(dt.minute))
 
     if args.fade:
         if args.verbose > 1:
