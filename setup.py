@@ -21,10 +21,10 @@ setup(
     long_description=long_description,
     classifiers=[
         "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.5",
     ],
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     install_requires=["unicornhathd"],
-    python_requires=">=3.7",
+    python_requires=">=3.5",
     entry_points={"console_scripts": ["piledclock=piledclock.cli:main"]},
 )
