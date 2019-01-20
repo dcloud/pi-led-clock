@@ -7,7 +7,13 @@ import unicornhathd as uhd
 
 from .core import split_digits, make_bitmap, print_bitmap
 from .chars import NUMBERS
-from .conf import DISPLAY_ROTATION, DISPLAY_DURATION, QUAD_SIZE
+from .conf import (
+    DISPLAY_ROTATION,
+    DISPLAY_DURATION,
+    FADE_INTERVAL,
+    MAX_BRIGHTNESS,
+    QUAD_SIZE,
+)
 
 
 def run(args):
@@ -32,12 +38,21 @@ def run(args):
 
     if args.fade:
         uhd.brightness(0)
+
+    fade_in_range = list(range(1, int(MAX_BRIGHTNESS * FADE_INTERVAL) + 1))
+    fade_out_range = list(reversed([0] + fade_in_range))
+
     uhd.show()
+
     if args.fade:
-        for x in range(1 / 100):
-            uhd.brightness(x)
+        for x in fade_in_range:
+            uhd.brightness(x / FADE_INTERVAL)
 
     time.sleep(args.duration)
+
+    if args.fade:
+        for x in fade_out_range:
+            uhd.brightness(x / FADE_INTERVAL)
 
     uhd.clear()
     uhd.off()
@@ -45,7 +60,7 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(description="Display time on LED clock")
-    parser.add_argument("--verbose", "-v", action="count")
+    parser.add_argument("--verbose", "-v", action="count", default=0)
     parser.add_argument("--rotation", type=int, default=DISPLAY_ROTATION)
     parser.add_argument("--color", choices=["RED", "GREEN", "BLUE"])
     parser.add_argument("--no-fade", action="store_false", dest="fade")
