@@ -3,7 +3,6 @@ Pi LED Clock: Display the time on a Unicorn HAT HD
 """
 
 from setuptools import setup, find_packages
-from codecs import open
 from os import path
 
 from piledclock import __version__, __author__
