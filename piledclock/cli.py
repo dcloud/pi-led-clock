@@ -93,9 +93,7 @@ def main():
     parser.add_argument("--verbose", "-v", action="count", default=0)
     parser.add_argument("--rotation", type=int, default=DISPLAY_ROTATION)
     group = parser.add_mutually_exclusive_group()
-    group.add_argument(
-        "--color", dest="colorname", choices=color_choices, default=Color.WHITE.name
-    )
+    group.add_argument("--color", dest="colorname", choices=color_choices)
     group.add_argument("--rgb", nargs=3, type=int)
     parser.add_argument("--no-fade", action="store_false", dest="fade")
     parser.add_argument(
