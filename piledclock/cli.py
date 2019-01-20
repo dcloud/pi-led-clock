@@ -17,6 +17,10 @@ from .conf import (
 
 
 def run(args):
+
+    logger = logging.getLogger("piledclock")
+    if args.verbose > 0:
+        logger.setLevel("INFO")
     uhd.off()
     uhd.rotation(args.rotation)
     uhd.brightness(1.0)
@@ -28,13 +32,11 @@ def run(args):
 
     for n, pos in zip(digits, quadrants):
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
-        if args.verbose > 1:
-            logging.info(bitmap)
+        logging.info(bitmap)
         print_bitmap(uhd, bitmap)
 
-    if args.verbose > 0:
-        logging.info("Hour  ", dt.hour)
-        logging.info("Minute", dt.minute)
+    logger.info("Hour  ", dt.hour)
+    logger.info("Minute", dt.minute)
 
     if args.fade:
         uhd.brightness(0)
