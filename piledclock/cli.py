@@ -36,6 +36,8 @@ def run(args):
     quadrants = ((x % 2 * QUAD_SIZE, x // 2 * QUAD_SIZE) for x in range(4))
 
     for n, pos in zip(digits, quadrants):
+        if args.verbose > 1:
+            print(pos, user_color)
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos, color_choice=user_color)
         if args.verbose > 1:
             print(bitmap)
