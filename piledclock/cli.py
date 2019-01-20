@@ -18,6 +18,14 @@ color_choices = tuple([c.name for c in Color])
 
 
 def run(args):
+
+    user_color = None
+    if args.color:
+        user_color = args.color
+    elif args.rgb:
+        user_color = tuple(args.rgb)
+    if args.verbose > 0:
+        print("Use color {}".format(user_color))
     uhd.off()
     uhd.rotation(args.rotation)
     uhd.brightness(1.0)
@@ -28,7 +36,7 @@ def run(args):
     quadrants = ((x % 2 * QUAD_SIZE, x // 2 * QUAD_SIZE) for x in range(4))
 
     for n, pos in zip(digits, quadrants):
-        bitmap = make_bitmap(NUMBERS[n - 1], offset=pos, color=args.color)
+        bitmap = make_bitmap(NUMBERS[n - 1], offset=pos, color_choice=user_color)
         if args.verbose > 1:
             print(bitmap)
         print_bitmap(uhd, bitmap)
@@ -80,7 +88,9 @@ def main():
     parser = argparse.ArgumentParser(description="Display time on LED clock")
     parser.add_argument("--verbose", "-v", action="count", default=0)
     parser.add_argument("--rotation", type=int, default=DISPLAY_ROTATION)
-    parser.add_argument("--color", choices=color_choices, default=Color.WHITE.name),
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--color", choices=color_choices, default=Color.WHITE.name)
+    group.add_argument("--rgb", nargs=3, type=int)
     parser.add_argument("--no-fade", action="store_false", dest="fade")
     parser.add_argument(
         "--duration",
