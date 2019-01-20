@@ -31,13 +31,14 @@ def run(args):
         print_bitmap(uhd, bitmap)
 
     if args.verbose > 0:
-        print("Hour %s", dt.hour)
-        print("Minute %s", dt.minute)
+        print("Hour {:02d}".format(dt.hour))
+        print("Minute {:02d}", dt.minute)
 
     if args.fade:
-        uhd.brightness(0)
         if args.verbose > 1:
             print("Fade LEDs")
+            print("Set brightness to 0")
+        uhd.brightness(0)
 
     fade_in_range = list(range(1, int(MAX_BRIGHTNESS * FADE_INTERVAL) + 1))
     fade_out_range = list(reversed([0] + fade_in_range))
@@ -48,8 +49,9 @@ def run(args):
         for x in fade_in_range:
             fade_amt = x / FADE_INTERVAL
             if args.verbose > 1:
-                print("Fade to %s", fade_amt)
+                print("Fade to {:.3f}".format(fade_amt))
             uhd.brightness(fade_amt)
+            uhd.show()
             time.sleep(1 / FADE_INTERVAL)
         uhd.brightness(MAX_BRIGHTNESS)
 
@@ -61,8 +63,9 @@ def run(args):
         for x in fade_out_range:
             fade_amt = x / FADE_INTERVAL
             if args.verbose > 1:
-                print("Fade to %s", fade_amt)
+                print("Fade to {:.3f}".format(fade_amt))
             uhd.brightness(fade_amt)
+            uhd.show()
             time.sleep(1 / FADE_INTERVAL)
         uhd.brightness(0)
 
