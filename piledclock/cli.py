@@ -35,8 +35,8 @@ def run(args):
         logging.info(bitmap)
         print_bitmap(uhd, bitmap)
 
-    logger.info("Hour  ", dt.hour)
-    logger.info("Minute", dt.minute)
+    logger.info("Hour %s", dt.hour)
+    logger.info("Minute %s", dt.minute)
 
     if args.fade:
         uhd.brightness(0)
