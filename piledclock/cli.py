@@ -2,15 +2,16 @@ from datetime import datetime
 import argparse
 import time
 import logging
+import sys
 
 import unicornhathd as uhd
 
 from .core import split_digits, make_bitmap, print_bitmap
 from .chars import NUMBERS
-from .conf import DISPLAY_ROTATION, QUAD_SIZE
+from .conf import DISPLAY_ROTATION, DISPLAY_DURATION, QUAD_SIZE
 
 
-def main(args):
+def run(args):
     uhd.off()
     uhd.rotation(args.rotation)
     uhd.brightness(1.0)
@@ -44,7 +45,7 @@ def main(args):
     uhd.off()
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Display time on LED clock")
     parser.add_argument("--verbose", "-v", action="count")
     parser.add_argument("--rotation", type=int, default=DISPLAY_ROTATION)
@@ -53,8 +54,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--duration",
         type=float,
-        default=8,
+        default=DISPLAY_DURATION,
         help="Number of seconds to display the time",
     )
-    args = parser.parse_args()
-    main(args)
+    args = parser.parse_args(sys.argv)
+    run(args)
+
+
+if __name__ == "__main__":
+    main()
