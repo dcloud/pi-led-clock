@@ -1,8 +1,6 @@
 from datetime import datetime
 import argparse
 import time
-import logging
-
 import unicornhathd as uhd
 
 from .core import split_digits, make_bitmap, print_bitmap
@@ -17,14 +15,6 @@ from .conf import (
 
 
 def run(args):
-    logger = logging.getLogger("piledclock")
-    loglvl = 30
-    if args.verbose == 1:
-        loglvl = 20
-    elif args.verbose > 1:
-        loglvl = 10
-    logger.setLevel(loglvl)
-
     uhd.off()
     uhd.rotation(args.rotation)
     uhd.brightness(1.0)
@@ -36,15 +26,18 @@ def run(args):
 
     for n, pos in zip(digits, quadrants):
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
-        logger.info(bitmap)
+        if args.verbose > 1:
+            print(bitmap)
         print_bitmap(uhd, bitmap)
 
-    logger.info("Hour %s", dt.hour)
-    logger.info("Minute %s", dt.minute)
+    if args.verbose > 0:
+        print("Hour %s", dt.hour)
+        print("Minute %s", dt.minute)
 
     if args.fade:
         uhd.brightness(0)
-        logger.info("Fade LEDs")
+        if args.verbose > 1:
+            print("Fade LEDs")
 
     fade_in_range = list(range(1, int(MAX_BRIGHTNESS * FADE_INTERVAL) + 1))
     fade_out_range = list(reversed([0] + fade_in_range))
@@ -54,18 +47,21 @@ def run(args):
     if args.fade:
         for x in fade_in_range:
             fade_amt = x / FADE_INTERVAL
-            logger.debug("Fade to %s", fade_amt)
+            if args.verbose > 1:
+                print("Fade to %s", fade_amt)
             uhd.brightness(fade_amt)
             time.sleep(1 / FADE_INTERVAL)
         uhd.brightness(MAX_BRIGHTNESS)
 
-    logger.debug("Sleeping for %s", args.duration)
+    if args.verbose > 1:
+        print("Sleeping for %s", args.duration)
     time.sleep(args.duration)
 
     if args.fade:
         for x in fade_out_range:
             fade_amt = x / FADE_INTERVAL
-            logger.debug("Fade to %s", fade_amt)
+            if args.verbose > 1:
+                print("Fade to %s", fade_amt)
             uhd.brightness(fade_amt)
             time.sleep(1 / FADE_INTERVAL)
         uhd.brightness(0)
