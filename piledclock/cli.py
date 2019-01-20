@@ -2,7 +2,6 @@ from datetime import datetime
 import argparse
 import time
 import logging
-import sys
 
 import unicornhathd as uhd
 
@@ -57,7 +56,7 @@ def main():
         default=DISPLAY_DURATION,
         help="Number of seconds to display the time",
     )
-    args = parser.parse_args(sys.argv)
+    args = parser.parse_args()
     run(args)
 
 
