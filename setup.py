@@ -19,7 +19,10 @@ setup(
     author=__author__,
     description="Pi LED Clock: Display the time on a Unicorn HAT HD",
     long_description=long_description,
-    classifiers=["Programming Language :: Python :: 3.7"],
+    classifiers=[
+        "Operating System :: POSIX :: Linux",
+        "Programming Language :: Python :: 3.7",
+    ],
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     install_requires=["unicornhathd"],
     python_requires=">=3.7",
