@@ -49,12 +49,14 @@ def run(args):
     if args.fade:
         for x in fade_in_range:
             uhd.brightness(x / FADE_INTERVAL)
+            time.sleep(1 / FADE_INTERVAL)
 
     time.sleep(args.duration)
 
     if args.fade:
         for x in fade_out_range:
             uhd.brightness(x / FADE_INTERVAL)
+            time.sleep(1 / FADE_INTERVAL)
 
     uhd.clear()
     uhd.off()
