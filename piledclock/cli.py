@@ -14,7 +14,6 @@ def run(args):
     uhd.off()
     uhd.rotation(args.rotation)
     uhd.brightness(1.0)
-    hat_width, hat_height = uhd.get_shape()
 
     dt = datetime.now()
 
@@ -23,7 +22,7 @@ def run(args):
 
     for n, pos in zip(digits, quadrants):
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
-        if logging.verbose > 1:
+        if args.verbose > 1:
             logging.info(bitmap)
         print_bitmap(uhd, bitmap)
 
