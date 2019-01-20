@@ -37,7 +37,9 @@ def run(args):
 
     for n, pos in zip(digits, quadrants):
         if args.verbose > 1:
-            print(pos, user_color)
+            print(
+                pos, user_color.value if isinstance(user_color, Color) else user_color
+            )
         bitmap = make_bitmap(NUMBERS[n - 1], offset=pos, color_choice=user_color)
         if args.verbose > 1:
             print(bitmap)
