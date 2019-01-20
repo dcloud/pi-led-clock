@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# unicornhathd at 90 degrees is:
+# x left to right
+# y top to bottom
+
 from datetime import datetime
 import time
 
@@ -108,19 +112,45 @@ NUMBERS = (
     ),
 )
 
-bit_steps = tuple([2 ** x for x in range(0, 8)])
+# We can hardcode the display size
+DISPLAY_SIZE = 16
+# Attached to pi zero, 180 is proper rotation
+DISPLAY_ROTATION = 180
+
+# We split a 16x16 display into 4 quadrants to fit 4 8px characters
+QUAD_SIZE = 8
+QUAD_DIV = DISPLAY_SIZE // QUAD_SIZE
 
 TEXT_COLOR = (36, 130, 206)
 BLACK = (0, 0, 0)
+
+# Calculate the values to extract bits from the bit chars
+# FYI, the range is reversed because drawing is from left-to-right
+bit_steps = tuple([2 ** x for x in reversed(range(0, QUAD_SIZE))])
 
 
 def split_digits(t):
     return (t // 10, t % 10)
 
 
+def make_bitmap(char, offset=(0, 0), color=TEXT_COLOR):
+    for x_pos, bits in enumerate(char):
+        x = x_pos + offset[1]
+        for y_pos, step in enumerate(bit_steps):
+            y = y_pos + offset[0]
+            pixel_on = bits & step != 0
+            yield (x, y), color if pixel_on else BLACK
+
+
+def print_bitmap(display, bitmap):
+    for pixel, color in bitmap:
+        display.set_pixel(*pixel, *color)
+        print(pixel, color)
+
+
 def main():
     uhd.off()
-    uhd.rotation(0)
+    uhd.rotation(DISPLAY_ROTATION)
     uhd.brightness(1.0)
     hat_width, hat_height = uhd.get_shape()
 
@@ -129,19 +159,28 @@ def main():
     print(time_str)
 
     hour_tens, hour_ones = split_digits(dt.hour)
+    min_tens, min_ones = split_digits(dt.minute)
 
-    for y, bits in enumerate(NUMBERS[hour_tens]):
-        for x, step in enumerate(bit_steps):
-            pixel_on = bits & step != 0
-            print("X" if pixel_on else "O", end="")
-            color = TEXT_COLOR if pixel_on else (255, 0, 0)
-            uhd.set_pixel(x, y, *color)
-        print("")
+    digits = (
+        (hour_tens, (0, 0)),
+        (hour_ones, (8, 0)),
+        (min_tens, (0, 8)),
+        (min_ones, (8, 8)),
+    )
+
+    for n, pos in digits:
+        bitmap = make_bitmap(NUMBERS[n - 1], offset=pos)
+        print_bitmap(uhd, bitmap)
 
     print("Hour  ", dt.hour)
     print("Minute", dt.minute)
 
     uhd.show()
+
+    time.sleep(3)
+
+    uhd.clear()
+    uhd.off()
 
 
 if __name__ == "__main__":
