@@ -33,7 +33,7 @@ def print_bitmap(display, bitmap):
 def to_color_tuple(in_color):
     if isinstance(in_color, Color):
         return in_color.value
-    elif isinstance(in_color, tuple) and len(in_color) == 3:
+    if isinstance(in_color, tuple) and len(in_color) == 3:
         return in_color
     return None
 
